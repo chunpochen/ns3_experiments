@@ -77,37 +77,36 @@ int main(int argc, char *argv[]) {
     wifiApNode1 = p2pNodes.Get(0);  
     wifiApNode2 = p2pNodes.Get(1); 
     
-    // 第一個WiFi網路設定    
-    YansWifiChannelHelper channel1 = YansWifiChannelHelper::Default(); // 創建預設的WiFi通道幫手
-    YansWifiPhyHelper phy1;             // 創建實體層幫手
-    phy1.SetChannel(channel1.Create()); // 設置實體層使用的通道
-    WifiHelper wifi1;   // 創建WiFi幫手
-    WifiMacHelper mac1; // 創建MAC層幫手
-    Ssid ssid1 = Ssid("ns-3-ssid1");  // 設置第一個WiFi網絡的SSID
-    // 設置站點的MAC層屬性
+    // setup first WiFi network 
+    YansWifiChannelHelper channel1 = YansWifiChannelHelper::Default(); 
+    YansWifiPhyHelper phy1;            
+    phy1.SetChannel(channel1.Create()); 
+    WifiHelper wifi1;
+    WifiMacHelper mac1; 
+    Ssid ssid1 = Ssid("ns-3-ssid1");  
+    // setup first MAC
     mac1.SetType("ns3::StaWifiMac", "Ssid", SsidValue(ssid1), "ActiveProbing", BooleanValue(false));
-    NetDeviceContainer staDevices1;  // 創建站點設備容器
-    staDevices1 = wifi1.Install(phy1, mac1, wifiStaNodes1);   // 安裝WiFi設備到站點節點
-    mac1.SetType("ns3::ApWifiMac", "Ssid", SsidValue(ssid1)); // 設定接入點的MAC層屬性
-    NetDeviceContainer apDevices1;   // 創建接入點設備容器
-    apDevices1 = wifi1.Install(phy1, mac1, wifiApNode1); // 安裝WiFi設備到接入點節點
+    NetDeviceContainer staDevices1; 
+    staDevices1 = wifi1.Install(phy1, mac1, wifiStaNodes1);   
+    mac1.SetType("ns3::ApWifiMac", "Ssid", SsidValue(ssid1)); 
+    NetDeviceContainer apDevices1;  
+    apDevices1 = wifi1.Install(phy1, mac1, wifiApNode1); 
 
 
-    // 第二個WiFi網路設定
-    YansWifiChannelHelper channel2 = YansWifiChannelHelper::Default(); // 創建預設的WiFi通道幫手
-    YansWifiPhyHelper phy2;             // 創建實體層幫手
-    phy2.SetChannel(channel2.Create()); // 設置實體層使用的通道
-    WifiHelper wifi2;   // 創建WiFi幫手
-    WifiMacHelper mac2; // 創建MAC層幫手
-    Ssid ssid2 = Ssid("ns-3-ssid2");  // 設置第二個WiFi網絡的SSID
-    // 設置站點的MAC層屬性
+    // setting second WiFi network 
+    YansWifiChannelHelper channel2 = YansWifiChannelHelper::Default(); 
+    YansWifiPhyHelper phy2;             
+    phy2.SetChannel(channel2.Create());
+    WifiHelper wifi2;   
+    WifiMacHelper mac2; 
+    Ssid ssid2 = Ssid("ns-3-ssid2"); 
+    // setup second MAC
     mac2.SetType("ns3::StaWifiMac", "Ssid", SsidValue(ssid2), "ActiveProbing", BooleanValue(false));
-    NetDeviceContainer staDevices2;  // 創建站點設備容器
-    staDevices2 = wifi2.Install(phy2, mac2, wifiStaNodes2);   // 安裝WiFi設備到站點節點
-    mac2.SetType("ns3::ApWifiMac", "Ssid", SsidValue(ssid2)); // 設定接入點的MAC層屬性
-    NetDeviceContainer apDevices2;   // 創建接入點設備容器
-    apDevices2 = wifi2.Install(phy2, mac2, wifiApNode2); // 安裝WiFi設備到接入點節點
-
+    NetDeviceContainer staDevices2;  
+    staDevices2 = wifi2.Install(phy2, mac2, wifiStaNodes2);   
+    mac2.SetType("ns3::ApWifiMac", "Ssid", SsidValue(ssid2)); 
+    NetDeviceContainer apDevices2;   
+    apDevices2 = wifi2.Install(phy2, mac2, wifiApNode2); 
 
     // Mobility configuration for both WiFi networks
     MobilityHelper mobility;
@@ -120,47 +119,46 @@ int main(int argc, char *argv[]) {
                                   "LayoutType", StringValue("RowFirst"));
     mobility.SetMobilityModel("ns3::RandomWalk2dMobilityModel",
                               "Bounds", RectangleValue(Rectangle(-50, 50, -50, 50)));
-    mobility.Install(wifiStaNodes1); // 安裝移動性到第一個WiFi網路的站點
-    mobility.Install(wifiStaNodes2); // 安裝移動性到第二個WiFi網路的站點
-    mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");   // 設置固定位置移動模型
-    mobility.Install(wifiApNode1); // 安裝移動性到第一個WiFi網路的接入點
-    mobility.Install(wifiApNode2); // 安裝移動性到第二個WiFi網路的接入點
+    mobility.Install(wifiStaNodes1); 
+    mobility.Install(wifiStaNodes2); 
+    mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");   
+    mobility.Install(wifiApNode1); 
+    mobility.Install(wifiApNode2); 
 
-    // 安裝互聯網協議堆疊   
+     
     InternetStackHelper stack;
-    stack.Install(p2pNodes);      // 安裝端對端節點
-    stack.Install(wifiApNode1);   // 安裝到第一個WiFi接入點節點
-    stack.Install(wifiStaNodes1); // 安裝到第一個WiFi站點節點
-    stack.Install(wifiApNode2);   // 安裝到第二個WiFi接入點節點
-    stack.Install(wifiStaNodes2); // 安裝到第二個WiFi站點節點 
+    stack.Install(p2pNodes);     
+    stack.Install(wifiApNode1);   
+    stack.Install(wifiStaNodes1); 
+    stack.Install(wifiApNode2);   
+    stack.Install(wifiStaNodes2); 
 
     // IP Addressing
     Ipv4AddressHelper address;
     address.SetBase("10.1.1.0", "255.255.255.0");
     Ipv4InterfaceContainer p2pInterfaces = address.Assign(p2pDevices);
 
-    // 配置第一個Wi-Fi的IP地址
+    
     address.SetBase("10.1.2.0", "255.255.255.0");
     Ipv4InterfaceContainer apInterface1 = address.Assign(apDevices1); // AP n0
     Ipv4InterfaceContainer staInterface1 = address.Assign(staDevices1); // STA n2, n3, n4
 
-    // 配置第二個Wi-Fi的IP地址
+    
     address.SetBase("10.1.3.0", "255.255.255.0");
     Ipv4InterfaceContainer apInterface2 = address.Assign(apDevices2); // AP n1
     Ipv4InterfaceContainer staInterface2 = address.Assign(staDevices2); // STA n5, n6, n7
     
-    // 在 n4 上安裝UDP Echo服務器應用程序
+ 
     UdpEchoServerHelper echoServer(9);
     ApplicationContainer serverApps = echoServer.Install(wifiStaNodes1.Get(2)); 
     serverApps.Start(Seconds(1.0));
     serverApps.Stop(Seconds(20.0));
 
-    // 在 n7 上安裝UDP Echo客戶端應用程序，並指向 n4 的IP
-    UdpEchoClientHelper echoClient(staInterface1.GetAddress(2), 9); // n4的IP地址10.1.2.4
+    UdpEchoClientHelper echoClient(staInterface1.GetAddress(2), 9); // n4 IP 10.1.2.4
     echoClient.SetAttribute("MaxPackets", UintegerValue(nPackets));
     echoClient.SetAttribute("Interval", TimeValue(Seconds(1.0)));
     echoClient.SetAttribute("PacketSize", UintegerValue(1024));
-    ApplicationContainer clientApps = echoClient.Install(wifiStaNodes2.Get(nWifi2 - 1)); // n7是第二個Wi-Fi網路中的第三个節點
+    ApplicationContainer clientApps = echoClient.Install(wifiStaNodes2.Get(nWifi2 - 1)); // 
     clientApps.Start(Seconds(2.0));
     clientApps.Stop(Seconds(20.0));
 
