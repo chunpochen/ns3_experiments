@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
     NetDeviceContainer serverDevices;
     NetDeviceContainer clientDevices;
 
-    for (uint32_t i = 0; i < nClients; ++i) {
+    for (uint32_t i = 0; i < nClients; i++) {
 
         std::ostringstream subnet;
         subnet << "10.1." << i+1 << ".0";
@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
     rand->SetAttribute("Min", DoubleValue(2.0));
     rand->SetAttribute("Max", DoubleValue(7.0));
 
-    for (uint32_t i = 0; i < clientApps.GetN(); ++i) {
+    for (uint32_t i = 0; i < clientApps.GetN(); i++) {
         clientApps.Get(i)->SetStartTime(Seconds(rand->GetValue()));
     } 
 
