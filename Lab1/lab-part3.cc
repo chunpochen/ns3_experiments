@@ -9,7 +9,7 @@
 #include "ns3/netanim-module.h"
 
 //
-// Default Network Topology
+// 
 //
 //   Wifi 10.1.3.0
 //                 AP
@@ -26,58 +26,57 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("lab1-part3");
 
 void CourseChange(std::string context, Ptr<const MobilityModel> model) {
-    Vector position = model->GetPosition(); // 獲取模型位置
-    // 輸出日誌
+    Vector position = model->GetPosition(); 
+
     NS_LOG_UNCOND(context <<
                 " x = " << position.x << ", y = " << position.y);
 }
 
 int main(int argc, char *argv[]) {
 
-    LogComponentEnableAll(LOG_PREFIX_NODE); // 啟用所有日誌組件
+    LogComponentEnableAll(LOG_PREFIX_NODE); 
 
-    bool verbose = true; // 啟用詳細日誌
+    bool verbose = true; 
     // uint32_t nWifi1 = 3; // First WiFi Network Nodes
-    uint32_t nWifi2 = 3;    // 第二個WiFi網路的節點數
-    uint32_t nPackets = 1;  // 發送的封包數量
-    bool tracing = false;   // 是否啟用追蹤
+    uint32_t nWifi2 = 3;    // Second WiFi Network Nodes
+    uint32_t nPackets = 1;  
+    bool tracing = false;  
 
-    CommandLine cmd;  // 命令行解析器
+    CommandLine cmd;  
     // cmd.AddValue("nWifi1", "Number of wifi STA devices1 in each network", nWifi1); 
     cmd.AddValue("nWifi2", "Number of wifi STA devices2 in each network", nWifi2); 
     cmd.AddValue("nPackets", "Number of packets to send", nPackets);
     cmd.AddValue("verbose", "Tell echo applications to log if true", verbose);
     cmd.AddValue("tracing", "Enable pcap tracing", tracing);
-    cmd.Parse(argc, argv);  // 解析命令行參數
+    cmd.Parse(argc, argv); 
 
-    if (nWifi2 >= 9) { // 如果WiFi節點超過9個，限制為9
+    if (nWifi2 >= 9) { 
         nWifi2 = 9;
     }
 
     if(nPackets >= 20) {
-        nPackets = 20; // 如果封包數量超過20，限制為20
+        nPackets = 20; 
     }
 
     if(verbose) {
-        LogComponentEnable("UdpEchoClientApplication", LOG_LEVEL_INFO); // 啟用UDP Echo客戶端應用程序的詳細日誌
-        LogComponentEnable("UdpEchoServerApplication", LOG_LEVEL_INFO); // 啟用UDP Echo服務器應用程序的詳細日誌
+        LogComponentEnable("UdpEchoClientApplication", LOG_LEVEL_INFO); 
+        LogComponentEnable("UdpEchoServerApplication", LOG_LEVEL_INFO); 
     }
 
-    NodeContainer p2pNodes; // 創建節點容器用於端對端節點
-    p2pNodes.Create(2);     // 創建2個端對端節點
-    PointToPointHelper pointToPoint; //端對端幫手
+    NodeContainer p2pNodes; 
+    p2pNodes.Create(2);    
+    PointToPointHelper pointToPoint; 
     pointToPoint.SetDeviceAttribute("DataRate", StringValue("5Mbps"));
     pointToPoint.SetChannelAttribute("Delay", StringValue("2ms"));
-    NetDeviceContainer p2pDevices;               // 創建網路設備容器
-    p2pDevices = pointToPoint.Install(p2pNodes); // 安裝點對點設備
-    NodeContainer wifiStaNodes1, wifiStaNodes2; // 創建WiFi站點節點容器
-    wifiStaNodes1.Create(3);      // 創建第一個WiFi網路的站點節點
-    wifiStaNodes2.Create(nWifi2); // 創建第二個WiFi網路的站點節點
-    NodeContainer wifiApNode1, wifiApNode2;     // 創建WiFi接入點節點容器
-    wifiApNode1 = p2pNodes.Get(0);  // 獲取第一個端對端節點作為第一個WiFi接入點
-    wifiApNode2 = p2pNodes.Get(1);  // 獲取第二個端對端節點作為第二個WiFi接入點
-
-
+    NetDeviceContainer p2pDevices;               
+    p2pDevices = pointToPoint.Install(p2pNodes); 
+    NodeContainer wifiStaNodes1, wifiStaNodes2;
+    wifiStaNodes1.Create(3);      
+    wifiStaNodes2.Create(nWifi2); 
+    NodeContainer wifiApNode1, wifiApNode2;   
+    wifiApNode1 = p2pNodes.Get(0);  
+    wifiApNode2 = p2pNodes.Get(1); 
+    
     // 第一個WiFi網路設定    
     YansWifiChannelHelper channel1 = YansWifiChannelHelper::Default(); // 創建預設的WiFi通道幫手
     YansWifiPhyHelper phy1;             // 創建實體層幫手
