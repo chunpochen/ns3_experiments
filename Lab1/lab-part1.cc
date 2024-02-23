@@ -54,20 +54,6 @@ int main(int argc, char *argv[]) {
     PointToPointHelper p2p; 
     p2p.SetDeviceAttribute("DataRate", StringValue("5Mbps"));  
     p2p.SetChannelAttribute("Delay", StringValue("2ms"));   
-    
-    // MobilityHelper mobility;
-    // mobility.SetPositionAllocator("ns3::GridPositionAllocator",
-    //                                 "MinX", DoubleValue(0.0),
-    //                                 "MinY", DoubleValue(0.0),
-    //                                 "DeltaX", DoubleValue(5.0),
-    //                                 "DeltaY", DoubleValue(10.0),
-    //                                 "GridWidth", UintegerValue(3),
-    //                                 "LayoutType", StringValue("RowFirst"));
-    // mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
-    // for(uint32_t i = 0; i < nClients; i++) {
-    //     mobility.Install(clientNodes);
-    // }
-
   
     InternetStackHelper stack;  
     stack.Install(serverNode); 
@@ -109,22 +95,7 @@ int main(int argc, char *argv[]) {
     }
     clientApps.Start(Seconds(2.0));
     clientApps.Stop(Seconds(100.0));
-
-    // // 印出伺服器節點的所有IP位址
-    // // 取得第一個節點視為伺服器
-    // Ptr<Node> server = serverNode.Get(0);
-    // // 從伺服器節點中獲得IPv4協定的實例
-    // Ptr<Ipv4> ipv4 = server->GetObject<Ipv4>();
-    // // 遍歷伺服器上的所有網路介面
-    // for (uint32_t i = 0; i < ipv4->GetNInterfaces(); i++) {
-    //     // 遍歷每個介面上的所有IP地址
-    //     for (uint32_t j = 0; j < ipv4->GetNAddresses(i); j++) {
-    //         // 取得特定介面上的特定位址
-    //         Ipv4InterfaceAddress addr = ipv4->GetAddress(i, j);
-    //         std::cout << "Interface " << i << " Address " << j << ": " << addr.GetLocal() << std::endl;
-    //     }
-    // }
-
+    
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
     Ptr<UniformRandomVariable> rand = CreateObject<UniformRandomVariable>();
@@ -133,15 +104,7 @@ int main(int argc, char *argv[]) {
 
     for (uint32_t i = 0; i < clientApps.GetN(); ++i) {
         clientApps.Get(i)->SetStartTime(Seconds(rand->GetValue()));
-    }
-
-    // mobility.Install(serverNode);
-    // mobility.Install(clientNodes);
-
-    // Ptr<MobilityModel> mobilityModelA = serverNode.Get(0)->GetObject<MobilityModel>();
-    // Ptr<MobilityModel> mobilityModelB = clientNodes.Get(0)->GetObject<MobilityModel>();
-    // Vector posA = mobilityModelA->GetPosition();  
-    // Vector posB = mobilityModelB->GetPosition();  
+    } 
 
     AsciiTraceHelper ascii;
     p2p.EnableAsciiAll(ascii.CreateFileStream("lab-part1.tr"));
@@ -163,11 +126,8 @@ int main(int argc, char *argv[]) {
     {
         flowmonHelper.SerializeToXmlFile("lab-part1.flowmon", false, false);
     }
-
+    
     Simulator::Destroy();
-
-    // double distance = CalculateDistance(posA, posB);
-    // std::cout << "Distance between the nodes: " << distance << " meters" << std::endl;
-
+    
     return 0;
 }
