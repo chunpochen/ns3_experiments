@@ -8,3 +8,8 @@ The following description is a description of each experiment.
 3. Set a different random start time for the UdpEchoClient application on the client, between 2 and 7. For the UdpEchoClient application, the UdpEchoServer application, and the simulation itself, set the stop time to 20 seconds.
 4. Use the SetAttribute() method to change the port number of the UdpEchoServer application to 15.
 5. All other parameters should be the same as the values ​​in first.cc in ns-3, namely the data rate and latency for each end-to-end link, and the interval and packet size for each UdpEchoClient.
+
+## lab-part2
+
+
+## lab-part3
