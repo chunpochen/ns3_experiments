@@ -1,6 +1,6 @@
 # Lab1
 ## lab1-part1
-### PointToPoint Experiment
+### Objective
 The primary aim of this experiment is to demonstrate how to set up a basic network topology in NS-3 and how to configure and run a UDP echo application for simple data transmission. Additionally, the experiment aims to show how to collect and analyze network performance data, such as through flow monitoring.
 
 ### Network Design
