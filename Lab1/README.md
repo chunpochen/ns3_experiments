@@ -23,7 +23,7 @@ Show how to configure and run a UDP Echo application within this topology for si
 
 ## lab1-part3
 
-#### Objective
+### Objective
 Demonstrate how to set up a hybrid network topology in NS-3 that includes both Wi-Fi and point-to-point connections.
 Show how to configure and run a UDP Echo application within this hybrid topology for basic data transmission.
 Analyze node mobility through network animations.
