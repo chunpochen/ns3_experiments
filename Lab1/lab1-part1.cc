@@ -4,7 +4,6 @@
 #include "ns3/point-to-point-module.h"      
 #include "ns3/applications-module.h"            
 #include "ns3/ipv4-global-routing-helper.h"    
-#include "ns3/flow-monitor-helper.h"
 #include "ns3/mobility-module.h"
 
 // 
@@ -34,8 +33,6 @@ int main(int argc, char *argv[]) {
     CommandLine cmd;    
     cmd.AddValue("nClients", "Number of client node", nClients);  
     cmd.AddValue("nPackets", "Number of packet", nPackets);     
-    bool enableFlowMonitor = false;
-    cmd.AddValue("EnableMonitor", "Enable Flow Monitor", enableFlowMonitor);
     cmd.Parse(argc, argv);  
 
     if (nClients >= 5) { 
@@ -106,27 +103,7 @@ int main(int argc, char *argv[]) {
         clientApps.Get(i)->SetStartTime(Seconds(rand->GetValue()));
     } 
 
-    AsciiTraceHelper ascii;
-    p2p.EnableAsciiAll(ascii.CreateFileStream("lab-part1.tr"));
-    p2p.EnablePcapAll("lab-part1");
-
-    // Flow Monitor
-    FlowMonitorHelper flowmonHelper;
-    Ptr<FlowMonitor> monitor;
-
-    if (enableFlowMonitor)
-    {
-        monitor = flowmonHelper.InstallAll();
-    }
-
-    Simulator::Stop(Seconds(100.0));
     Simulator::Run();
-
-    if (enableFlowMonitor)
-    {
-        flowmonHelper.SerializeToXmlFile("lab-part1.flowmon", false, false);
-    }
-    
     Simulator::Destroy();
     
     return 0;
